@@ -1,3 +1,10 @@
+/**
+ * TODO
+ *
+ * - Auto pause any video that might be included in a modal
+ * - Implement pushState to change the URL when opening/closing a modal
+ */
+
 'use strict';
 
 class Modal {
