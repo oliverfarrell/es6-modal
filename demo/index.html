@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Modal Example</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    .modal {
+      display: none;
+
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      z-index: 99;
+
+      padding: 15px;
+
+      width: 600px;
+      max-width: 90%;
+
+      background-color: #fff;
+
+      transform: translate(-50%, -50%);
+      -webkit-animation: fadeIn 0.3s;
+    }
+
+    .overlay {
+      display: none;
+
+      position: fixed;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      left: 0;
+
+      background-color: rgba(0, 0, 0, 0.5);
+      -webkit-animation: fadeIn 0.3s;
+    }
+
+    .is-active {
+      display: block;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    @keyframes fadeOut {
+      from { opacity: 1; }
+      to { opacity: 0; }
+    }
+  </style>
+</head>
+<body>
+
+  <button data-modal-id="1">Show modal 1</button>
+  <button data-modal-id="2">Show modal 2</button>
+
+  <div data-modal class="modal" id="1">
+    <button data-modal-close>Close</button>
+    <p>Modal 1</p>
+  </div>
+
+  <div data-modal class="modal" id="2">
+    <button data-modal-close>Close</button>
+    <p>Modal 2</p>
+  </div>
+
+  <script src="../dist/modals.js"></script>
+  <script>
+    new Modal();
+  </script>
+</body>
+</html>
