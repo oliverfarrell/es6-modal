@@ -38,6 +38,7 @@ var Modal = function () {
     // Bind `this` to the method so we can use it
     this.onClick = this.onClick.bind(this);
     this.onKeydown = this.onKeydown.bind(this);
+    this.onLoad = this.onLoad.bind(this);
     this.show = this.show.bind(this);
     this.hideAll = this.hideAll.bind(this);
 
@@ -57,6 +58,9 @@ var Modal = function () {
 
       // 3. Add event listeners on keydown
       document.addEventListener('keydown', this.onKeydown);
+
+      // 4. Add event listeners on load
+      window.addEventListener('load', this.onLoad);
     }
   }, {
     key: 'onClick',
@@ -83,6 +87,7 @@ var Modal = function () {
           // 3. If the target element is the `.overlay`
         } else if (evt.target.matches('.overlay')) {
 
+            // 1. Close everything
             this.hideAll();
 
             // 4. Otherwise it was none of the above, so cancel.
@@ -98,7 +103,20 @@ var Modal = function () {
     key: 'onKeydown',
     value: function onKeydown(evt) {
 
+      // 1. If user hits `esc` key, close everything
       if (evt.keyCode === 27) this.hideAll();
+    }
+  }, {
+    key: 'onLoad',
+    value: function onLoad(evt) {
+
+      var hash = window.location.hash.substring(1);
+
+      if (hash) {
+        var modal = document.getElementById(hash);
+
+        if (modal) this.show(modal.id);
+      }
     }
   }, {
     key: 'show',
@@ -111,7 +129,7 @@ var Modal = function () {
       if (!document.querySelector('.overlay')) {
         var overlay = document.createElement('div');
         overlay.classList.add('overlay');
-        overlay.classList.add('is-active');
+        overlay.classList.add(this.activeClass);
         document.body.appendChild(overlay);
       }
 
@@ -132,7 +150,7 @@ var Modal = function () {
       modal.classList.remove(this.activeClass);
 
       // 3. If there are no modals active
-      if (!document.querySelector(this.selector + '.is-active')) {
+      if (!document.querySelector(this.selector + '.' + this.activeClass)) {
 
         // 1. Remove the overlay
         var overlay = document.querySelector('.overlay');
@@ -147,7 +165,7 @@ var Modal = function () {
     value: function hideAll() {
 
       // 1. Grab all active models
-      var modals = document.querySelectorAll(this.selector + '.is-active');
+      var modals = document.querySelectorAll(this.selector + '.' + this.activeClass);
 
       // 2. Hide each active modal
       for (var i = 0; i < modals.length; i++) {

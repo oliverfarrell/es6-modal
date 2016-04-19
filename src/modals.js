@@ -34,6 +34,7 @@ class Modal {
     // Bind `this` to the method so we can use it
     this.onClick = this.onClick.bind(this);
     this.onKeydown = this.onKeydown.bind(this);
+    this.onLoad = this.onLoad.bind(this);
     this.show = this.show.bind(this);
     this.hideAll = this.hideAll.bind(this);
 
@@ -52,6 +53,9 @@ class Modal {
 
     // 3. Add event listeners on keydown
     document.addEventListener('keydown', this.onKeydown);
+
+    // 4. Add event listeners on load
+    window.addEventListener('load', this.onLoad);
 
   }
 
@@ -80,6 +84,7 @@ class Modal {
     // 3. If the target element is the `.overlay`
     } else if (evt.target.matches('.overlay')) {
 
+      // 1. Close everything
       this.hideAll();
 
     // 4. Otherwise it was none of the above, so cancel.
@@ -96,8 +101,22 @@ class Modal {
 
   onKeydown (evt) {
 
+    // 1. If user hits `esc` key, close everything
     if(evt.keyCode === 27)
       this.hideAll();
+
+  }
+
+  onLoad (evt) {
+
+    let hash = window.location.hash.substring(1);
+
+    if(hash) {
+      let modal = document.getElementById(hash);
+
+      if(modal)
+        this.show(modal.id);
+    }
 
   }
 
@@ -110,7 +129,7 @@ class Modal {
     if (!document.querySelector('.overlay')) {
       let overlay = document.createElement('div');
       overlay.classList.add('overlay');
-      overlay.classList.add('is-active');
+      overlay.classList.add(this.activeClass);
       document.body.appendChild(overlay);
     }
 
@@ -132,7 +151,7 @@ class Modal {
     modal.classList.remove(this.activeClass);
 
     // 3. If there are no modals active
-    if (!document.querySelector(this.selector + '.is-active')) {
+    if (!document.querySelector(this.selector + '.' + this.activeClass)) {
 
       // 1. Remove the overlay
       let overlay = document.querySelector('.overlay');
@@ -148,7 +167,7 @@ class Modal {
   hideAll () {
 
     // 1. Grab all active models
-    const modals = document.querySelectorAll(this.selector + '.is-active');
+    const modals = document.querySelectorAll(this.selector + '.' + this.activeClass);
 
     // 2. Hide each active modal
     for (var i = 0; i < modals.length; i++) {
