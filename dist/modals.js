@@ -43,6 +43,14 @@ var Modal = function () {
     // when the modal is active and visible
     this.bodyClass = options.bodyClass || 'modal-is-active';
 
+    // Define the callback that should be executed when a
+    // modal is shown
+    this.onShow = options.onShow || null;
+
+    // Define the callback that should be executed when a
+    // modal is hidden
+    this.onHide = options.onHide || null;
+
     // Bind `this` to the method so we can use it
     this.onClick = this.onClick.bind(this);
     this.onKeydown = this.onKeydown.bind(this);
@@ -176,6 +184,11 @@ var Modal = function () {
 
       // 5. Change the URL
       window.history.pushState(null, 'modal ' + id, '#' + id);
+
+      // 6. Execute any callback that might have been supplied
+      if (typeof this.onShow === 'function') {
+        this.onShow.call(this);
+      }
     }
   }, {
     key: 'hide',
@@ -202,6 +215,11 @@ var Modal = function () {
 
         // 3. Change the URL
         window.history.pushState(null, document.title, window.location.pathname);
+      }
+
+      // 5. Execute any callback that might have been supplied
+      if (typeof this.onHide === 'function') {
+        this.onHide.call(this);
       }
     }
   }, {

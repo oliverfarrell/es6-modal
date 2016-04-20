@@ -74,7 +74,14 @@
 
   <script src="../dist/modals.min.js"></script>
   <script>
-    new Modal();
+    new Modal({
+      onShow: function () {
+        console.log('showing!');
+      },
+      onHide: function () {
+        console.log('hiding!');
+      }
+    });
   </script>
 
 </body>
