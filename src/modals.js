@@ -128,11 +128,16 @@ class Modal {
 
   onLoad (evt) {
 
+    // 1. Grab the hash from the URL
     let hash = window.location.hash.substring(1);
 
+    // 2. If a hash is present
     if(hash) {
+
+      // 1. Find the modal that matches the hash
       let modal = document.getElementById(hash);
 
+      // 2. If a modal exists, show the modal
       if(modal)
         this.show(modal.id);
     }
