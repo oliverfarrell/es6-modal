@@ -3,6 +3,7 @@
  *
  * - Auto pause any video that might be included in a modal
  * - Implement pushState to change the URL when opening/closing a modal
+ * - Add a callback that can be fired when the modal loads
  */
 
 'use strict';
@@ -44,6 +45,7 @@ class Modal {
     this.onLoad = this.onLoad.bind(this);
     this.show = this.show.bind(this);
     this.hideAll = this.hideAll.bind(this);
+    this.onPopstate = this.onPopstate.bind(this);
 
     // Add event listeners
     this.addEventListeners();
@@ -63,6 +65,9 @@ class Modal {
 
     // 4. Add event listeners on load
     window.addEventListener('load', this.onLoad);
+
+    // 5. Add event listeners on popstate
+    window.addEventListener('popstate', this.onPopstate);
 
   }
 
@@ -127,6 +132,29 @@ class Modal {
 
   }
 
+  onPopstate () {
+
+    this.hideAll();
+    this.onLoad();
+
+  }
+
+  pauseVideo (modal) {
+
+    let iframe = modal.querySelector('iframe'),
+        video = modal.querySelector('video');
+
+    if (iframe) {
+      var iframeSrc = iframe.src;
+      iframe.src = iframeSrc;
+    }
+
+    if (video) {
+      video.pause();
+    }
+
+  }
+
   show (id) {
 
     // 1. Grab the modal that matches the ID
@@ -146,6 +174,9 @@ class Modal {
     // 4. Add an active class to the <body>
     document.body.classList.add(this.bodyClass);
 
+    // 5. Change the URL
+    window.history.pushState(null, 'modal ' + id, '#' + id);
+
   }
 
 
@@ -154,10 +185,13 @@ class Modal {
     // 1. Grab the modal that matches the ID
     const modal = document.getElementById(id);
 
-    // 2. Remove the active class to the modal instance
+    // 2. Pause any audio/video that might be playing
+    this.pauseVideo(modal);
+
+    // 3. Remove the active class to the modal instance
     modal.classList.remove(this.activeClass);
 
-    // 3. If there are no modals active
+    // 4. If there are no modals active
     if (!document.querySelector(this.selector + '.' + this.activeClass)) {
 
       // 1. Remove the overlay
@@ -166,6 +200,9 @@ class Modal {
 
       // 2. Remove the active class from the body
       document.body.classList.remove(this.bodyClass);
+
+      // 3. Change the URL
+      window.history.pushState(null, document.title, window.location.pathname);
 
     }
 

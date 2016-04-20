@@ -1,3 +1,11 @@
+/**
+ * TODO
+ *
+ * - Auto pause any video that might be included in a modal
+ * - Implement pushState to change the URL when opening/closing a modal
+ * - Add a callback that can be fired when the modal loads
+ */
+
 'use strict';
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
@@ -41,6 +49,7 @@ var Modal = function () {
     this.onLoad = this.onLoad.bind(this);
     this.show = this.show.bind(this);
     this.hideAll = this.hideAll.bind(this);
+    this.onPopstate = this.onPopstate.bind(this);
 
     // Add event listeners
     this.addEventListeners();
@@ -61,6 +70,9 @@ var Modal = function () {
 
       // 4. Add event listeners on load
       window.addEventListener('load', this.onLoad);
+
+      // 5. Add event listeners on popstate
+      window.addEventListener('popstate', this.onPopstate);
     }
   }, {
     key: 'onClick',
@@ -119,6 +131,29 @@ var Modal = function () {
       }
     }
   }, {
+    key: 'onPopstate',
+    value: function onPopstate() {
+
+      this.hideAll();
+      this.onLoad();
+    }
+  }, {
+    key: 'pauseVideo',
+    value: function pauseVideo(modal) {
+
+      var iframe = modal.querySelector('iframe'),
+          video = modal.querySelector('video');
+
+      if (iframe) {
+        var iframeSrc = iframe.src;
+        iframe.src = iframeSrc;
+      }
+
+      if (video) {
+        video.pause();
+      }
+    }
+  }, {
     key: 'show',
     value: function show(id) {
 
@@ -138,6 +173,9 @@ var Modal = function () {
 
       // 4. Add an active class to the <body>
       document.body.classList.add(this.bodyClass);
+
+      // 5. Change the URL
+      window.history.pushState(null, 'modal ' + id, '#' + id);
     }
   }, {
     key: 'hide',
@@ -146,10 +184,13 @@ var Modal = function () {
       // 1. Grab the modal that matches the ID
       var modal = document.getElementById(id);
 
-      // 2. Remove the active class to the modal instance
+      // 2. Pause any audio/video that might be playing
+      this.pauseVideo(modal);
+
+      // 3. Remove the active class to the modal instance
       modal.classList.remove(this.activeClass);
 
-      // 3. If there are no modals active
+      // 4. If there are no modals active
       if (!document.querySelector(this.selector + '.' + this.activeClass)) {
 
         // 1. Remove the overlay
@@ -158,6 +199,9 @@ var Modal = function () {
 
         // 2. Remove the active class from the body
         document.body.classList.remove(this.bodyClass);
+
+        // 3. Change the URL
+        window.history.pushState(null, document.title, window.location.pathname);
       }
     }
   }, {
