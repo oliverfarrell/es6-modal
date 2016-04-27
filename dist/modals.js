@@ -1,9 +1,7 @@
 /**
  * TODO
  *
- * - Auto pause any video that might be included in a modal
  * - Implement pushState to change the URL when opening/closing a modal
- * - Add a callback that can be fired when the modal loads
  */
 
 'use strict';
@@ -130,11 +128,16 @@ var Modal = function () {
     key: 'onLoad',
     value: function onLoad(evt) {
 
+      // 1. Grab the hash from the URL
       var hash = window.location.hash.substring(1);
 
+      // 2. If a hash is present
       if (hash) {
+
+        // 1. Find the modal that matches the hash
         var modal = document.getElementById(hash);
 
+        // 2. If a modal exists, show the modal
         if (modal) this.show(modal.id);
       }
     }
@@ -142,22 +145,32 @@ var Modal = function () {
     key: 'onPopstate',
     value: function onPopstate() {
 
+      // 1. Hide all the modals
       this.hideAll();
+
+      // 2. Load the modal that matches the hash in the URL if there is one
       this.onLoad();
     }
   }, {
     key: 'pauseVideo',
     value: function pauseVideo(modal) {
 
+      // 1. Grab any iframes or videos
       var iframe = modal.querySelector('iframe'),
           video = modal.querySelector('video');
 
+      // 2. If there is an iframe
       if (iframe) {
+
+        // 1. Replace the iframe source, effectively reloading it
         var iframeSrc = iframe.src;
         iframe.src = iframeSrc;
       }
 
+      // 3. If there is a video
       if (video) {
+
+        // 1. Pause the video
         video.pause();
       }
     }

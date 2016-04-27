@@ -1,7 +1,6 @@
 /**
  * TODO
  *
- * - Auto pause any video that might be included in a modal
  * - Implement pushState to change the URL when opening/closing a modal
  */
 
@@ -146,23 +145,35 @@ class Modal {
 
   onPopstate () {
 
+    // 1. Hide all the modals
     this.hideAll();
+
+    // 2. Load the modal that matches the hash in the URL if there is one
     this.onLoad();
 
   }
 
   pauseVideo (modal) {
 
+    // 1. Grab any iframes or videos
     let iframe = modal.querySelector('iframe'),
         video = modal.querySelector('video');
 
+    // 2. If there is an iframe
     if (iframe) {
-      var iframeSrc = iframe.src;
+
+      // 1. Replace the iframe source, effectively reloading it
+      let iframeSrc = iframe.src;
       iframe.src = iframeSrc;
+
     }
 
+    // 3. If there is a video
     if (video) {
+
+      // 1. Pause the video
       video.pause();
+
     }
 
   }
