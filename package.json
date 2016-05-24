@@ -18,7 +18,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git://github.com/jonnyhaynes/cookie-disclaimer.git"
+    "url": "git://github.com/oliverfarrell/es6-modal.git"
   },
   "keywords": [
     "modal",

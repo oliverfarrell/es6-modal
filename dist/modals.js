@@ -1,9 +1,3 @@
-/**
- * TODO
- *
- * - Implement pushState to change the URL when opening/closing a modal
- */
-
 'use strict';
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
@@ -29,27 +23,22 @@ var Modal = function () {
     // Define the selector that will trigger the modal instance
     this.showSelector = options.showSelector || '[data-modal-id]';
 
-    // Define whether the modal should follow
-    // the user down the page when they scroll
+    // Define whether the modal should follow the user down the page when they scroll
     this.isFixed = options.isFixed || true;
 
-    // Define the class that is added to the modal
-    // when it is active and visible
+    // Define the class that is added to the modalwhen it is active and visible
     this.activeClass = options.activeClass || 'is-active';
 
-    // Define the class that is added to the <body>
-    // when the modal is active and visible
+    // Define the class that is added to the <body> when the modal is active and visible
     this.bodyClass = options.bodyClass || 'modal-is-active';
 
-    // Define the callback that should be executed when a
-    // modal is shown
+    // Define the callback that should be executed when a modal is shown
     this.onShow = options.onShow || null;
 
-    // Define the callback that should be executed when a
-    // modal is hidden
+    // Define the callback that should be executed when a modal is hidden
     this.onHide = options.onHide || null;
 
-    // Bind `this` to the method so we can use it
+    // Bind `this` to the method so `this` always equals the Modal instance
     this.onClick = this.onClick.bind(this);
     this.onKeydown = this.onKeydown.bind(this);
     this.onLoad = this.onLoad.bind(this);
@@ -126,7 +115,7 @@ var Modal = function () {
     }
   }, {
     key: 'onLoad',
-    value: function onLoad(evt) {
+    value: function onLoad() {
 
       // 1. Grab the hash from the URL
       var hash = window.location.hash.substring(1);
@@ -183,9 +172,13 @@ var Modal = function () {
 
       // 2. Add an overlay to disable the rest of the site
       if (!document.querySelector('.overlay')) {
+
+        // 1. Create the element
         var overlay = document.createElement('div');
         overlay.classList.add('overlay');
         overlay.classList.add(this.activeClass);
+
+        // 2. Append it to the body
         document.body.appendChild(overlay);
       }
 
@@ -244,7 +237,11 @@ var Modal = function () {
 
       // 2. Hide each active modal
       for (var i = 0; i < modals.length; i++) {
+
+        // 1. Assign modals[i] to a friendlier name
         var modal = modals[i];
+
+        // 2. Hide the modal
         this.hide(modal.id);
       }
     }

@@ -13,7 +13,7 @@ Getting started couldn't be easier. If you're using something like webpack, or b
 npm install super-simple-modals
 ```
 
-Then simple require the package in your project.
+Then simply require the package in your project.
 
 ```
 const Modal = require('super-simple-modals');

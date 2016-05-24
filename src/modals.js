@@ -1,9 +1,3 @@
-/**
- * TODO
- *
- * - Implement pushState to change the URL when opening/closing a modal
- */
-
 'use strict';
 
 class Modal {
@@ -25,27 +19,22 @@ class Modal {
     // Define the selector that will trigger the modal instance
     this.showSelector = options.showSelector || '[data-modal-id]';
 
-    // Define whether the modal should follow
-    // the user down the page when they scroll
+    // Define whether the modal should follow the user down the page when they scroll
     this.isFixed = options.isFixed || true;
 
-    // Define the class that is added to the modal
-    // when it is active and visible
+    // Define the class that is added to the modalwhen it is active and visible
     this.activeClass = options.activeClass || 'is-active';
 
-    // Define the class that is added to the <body>
-    // when the modal is active and visible
+    // Define the class that is added to the <body> when the modal is active and visible
     this.bodyClass = options.bodyClass || 'modal-is-active';
 
-    // Define the callback that should be executed when a
-    // modal is shown
+    // Define the callback that should be executed when a modal is shown
     this.onShow = options.onShow || null;
 
-    // Define the callback that should be executed when a
-    // modal is hidden
+    // Define the callback that should be executed when a modal is hidden
     this.onHide = options.onHide || null;
 
-    // Bind `this` to the method so we can use it
+    // Bind `this` to the method so `this` always equals the Modal instance
     this.onClick = this.onClick.bind(this);
     this.onKeydown = this.onKeydown.bind(this);
     this.onLoad = this.onLoad.bind(this);
@@ -83,21 +72,19 @@ class Modal {
     if (evt.target.matches(this.showSelector)) {
 
       // 1. Store the ID of the modal being requested
-      let modalId = evt.target.dataset.modalId;
+      const modalId = evt.target.dataset.modalId;
 
       // 2. If there is a modal ID, show the modal that matches
-      if (modalId)
-        this.show(modalId);
+      if (modalId) this.show(modalId);
 
     // 2. If the target element matches `this.closeSelector`
     } else if (evt.target.matches(this.closeSelector)) {
 
       // 1. Store the ID of the modal being hidden
-      let modalId = evt.target.parentNode.id;
+      const modalId = evt.target.parentNode.id;
 
       // 2. If there is a modal ID, hide the modal that matches
-      if (modalId)
-        this.hide(modalId);
+      if (modalId) this.hide(modalId);
 
     // 3. If the target element is the `.overlay`
     } else if (evt.target.matches('.overlay')) {
@@ -120,25 +107,23 @@ class Modal {
   onKeydown (evt) {
 
     // 1. If user hits `esc` key, close everything
-    if(evt.keyCode === 27)
-      this.hideAll();
+    if(evt.keyCode === 27) this.hideAll();
 
   }
 
-  onLoad (evt) {
+  onLoad () {
 
     // 1. Grab the hash from the URL
-    let hash = window.location.hash.substring(1);
+    const hash = window.location.hash.substring(1);
 
     // 2. If a hash is present
     if(hash) {
 
       // 1. Find the modal that matches the hash
-      let modal = document.getElementById(hash);
+      const modal = document.getElementById(hash);
 
       // 2. If a modal exists, show the modal
-      if(modal)
-        this.show(modal.id);
+      if(modal) this.show(modal.id);
     }
 
   }
@@ -185,10 +170,15 @@ class Modal {
 
     // 2. Add an overlay to disable the rest of the site
     if (!document.querySelector('.overlay')) {
+
+      // 1. Create the element
       let overlay = document.createElement('div');
       overlay.classList.add('overlay');
       overlay.classList.add(this.activeClass);
+
+      // 2. Append it to the body
       document.body.appendChild(overlay);
+
     }
 
     // 3. Add an active class to the modal instance
@@ -248,8 +238,13 @@ class Modal {
 
     // 2. Hide each active modal
     for (var i = 0; i < modals.length; i++) {
-      let modal = modals[i];
+
+      // 1. Assign modals[i] to a friendlier name
+      const modal = modals[i];
+
+      // 2. Hide the modal
       this.hide(modal.id);
+
     }
 
   }
