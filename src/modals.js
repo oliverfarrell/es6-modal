@@ -8,7 +8,7 @@ class Modal {
     let options = {};
 
     // Merge the user defined settings with the options object
-    Object.assign(options, settings);
+    Object.keys(settings).forEach(function(key) { options[key] = settings[key]; });
 
     // Define the modal selector
     this.selector = options.selector || '[data-modal]';
@@ -196,7 +196,6 @@ class Modal {
     }
 
   }
-
 
   hide (id) {
 

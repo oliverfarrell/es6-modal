@@ -7,14 +7,18 @@ Simple modals / popups / lightboxes.
 ## Getting Started
 
 ### Using NPM
-Getting started couldn't be easier. If you're using something like webpack, or browserify you can grab the package like so.
-
-```
-npm install super-simple-modals
-```
-
-Then simply require the package in your project.
+Getting started couldn't be easier. If you're using something like webpack, or browserify you can use the package like so.
 
 ```
 const Modal = require('super-simple-modals');
+
+new Modal({
+  selector: '.modal',
+  onShow: function () {
+    console.log('showing!');
+  },
+  onHide: function () {
+    console.log('hiding!');
+  }
+});
 ```
