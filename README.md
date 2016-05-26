@@ -9,7 +9,7 @@ Simple modals / popups / lightboxes.
 ### Using NPM
 Getting started couldn't be easier. If you're using something like webpack, or browserify you can use the package like so.
 
-```
+```javascript
 const Modal = require('super-simple-modals');
 
 new Modal({
